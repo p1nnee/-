@@ -17,6 +17,6 @@ int world_is_empty(const World* world, int row, int col);
 
 int world_set_cell(World* world, int row, int col, char symbol);
 
-int world_check_win(const World* world);
+int world_check_win(const World* world, char symbol);
 
 #endif

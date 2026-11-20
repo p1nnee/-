@@ -80,9 +80,9 @@ int main(void) {
     printf("       TIC-TAC-TOE GAME\n");
     printf("=================================\n\n");
 
-    rows = read_int("Enter number of rows (1-50): ", 1, MAX_SIZE);
+    rows = read_int("Enter number of rows (3-50): ", 3, MAX_SIZE);
 
-    cols = read_int("Enter number of columns (1-50): ", 1, MAX_SIZE);
+    cols = read_int("Enter number of columns (3-50): ", 3, MAX_SIZE);
 
     character_init(
         &player1,
@@ -129,7 +129,7 @@ int main(void) {
 
         moves++;
 
-        if (world_check_win(&world)) {
+        if (world_check_win(&world, character_get_symbol(current_player))) {
             world_print(&world);
 
             printf("Player %c wins!\n",

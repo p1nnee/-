@@ -98,52 +98,42 @@ int world_set_cell(World* world, int row, int col, char symbol) {
     return 1;
 }
 
-int world_check_win(const World* world) {
-    int dr[] = { 0, 1, 1, 1 };
-    int dc[] = { 1, 0, 1, -1 };
+int world_check_win(const World* world, char symbol)
+{
+    int directions[4][2] = {
+        {0, 1},   // horizontal
+        {1, 0},   // vertical
+        {1, 1},   // diagonal down-right
+        {1, -1}   // diagonal down-left
+    };
 
-    int r, c, d;
+    for (int row = 0; row < world->rows; row++)
+    {
+        for (int col = 0; col < world->cols; col++)
+        {
+            if (world->cells[row][col] != symbol)
+                continue;
 
-    for (d = 0; d < 4; d++) {
+            for (int d = 0; d < 4; d++)
+            {
+                int dr = directions[d][0];
+                int dc = directions[d][1];
 
-        for (r = 0; r < world->rows; r++) {
+                int r1 = row + dr;
+                int c1 = col + dc;
+                int r2 = row + 2 * dr;
+                int c2 = col + 2 * dc;
 
-            for (c = 0; c < world->cols; c++) {
-
-                int prev_r = r - dr[d];
-                int prev_c = c - dc[d];
-
-                if (prev_r >= 0 && prev_r < world->rows &&
-                    prev_c >= 0 && prev_c < world->cols) {
-                    continue;
-                }
-
-                char symbol = world->cells[r][c];
-
-                if (symbol == ' ') {
-                    continue;
-                }
-
-                int nr = r;
-                int nc = c;
-                int length = 0;
-                int same = 1;
-
-                while (nr >= 0 && nr < world->rows &&
-                    nc >= 0 && nc < world->cols) {
-
-                    if (world->cells[nr][nc] != symbol) {
-                        same = 0;
+                if (r1 >= 0 && r1 < world->rows &&
+                    c1 >= 0 && c1 < world->cols &&
+                    r2 >= 0 && r2 < world->rows &&
+                    c2 >= 0 && c2 < world->cols)
+                {
+                    if (world->cells[r1][c1] == symbol &&
+                        world->cells[r2][c2] == symbol)
+                    {
+                        return 1;
                     }
-
-                    length++;
-
-                    nr += dr[d];
-                    nc += dc[d];
-                }
-
-                if (same && length > 1) {
-                    return 1;
                 }
             }
         }
